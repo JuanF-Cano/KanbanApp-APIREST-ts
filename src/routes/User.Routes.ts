@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUsers, createUser, login, deleteUser, actualizateUser, getUserById } from "../controllers/User.Controller";
+import { getUsers, createUser, login, deleteUser, updateUser, getUserById } from "../controllers/User.Controller";
 import { validateUser, validateLogin } from "../middleware/models";
 import { authenticateToken } from "../middleware/jwt";
 
@@ -21,6 +21,6 @@ userRouter.get('/user', authenticateToken, getUserById)
 userRouter.delete('/user', authenticateToken, deleteUser);
 
 // Actualizar usuario por ID
-userRouter.put('/user', authenticateToken, validateUser, actualizateUser);
+userRouter.put('/user', authenticateToken, validateUser, updateUser);
 
 export default userRouter;
