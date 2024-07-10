@@ -55,7 +55,7 @@ export const getUserById = async (req: UserRequestBody, res: Response): Promise<
 };
 
 // Exporta la función createUser que crea un nuevo usuario en la base de datos
-export const createUser = async (req: UserRequestBody, res: Response): Promise<Response> => {
+export const createUser = async (req: UserRequestBody, res: Response): Promise<void> => {
   const { name, email, password } = req.body;
 
   try {
@@ -64,11 +64,11 @@ export const createUser = async (req: UserRequestBody, res: Response): Promise<R
       'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *',
       [name, email, hashedPassword]
     );
-    return res.status(201).json(result.rows[0]);
+    res.status(201).json(result.rows[0])
+    return;
   } catch (err) {
-    if (err.code === '23505') return res.status(409).send('Email in use');
-    console.error(err);
-    return res.status(500).send('Error creating user');
+    res.status(500).send('Error creating user')
+    return;
   }
 };
 
