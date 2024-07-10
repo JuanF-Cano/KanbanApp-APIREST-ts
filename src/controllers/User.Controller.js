@@ -22,8 +22,7 @@ export const getUsers = (async (req, res) => {
 
 // Exporta la función getUserById que obtiene un usuario de la base de datos
 export const getUserById = async (req, res) => {
-    //extraer id del token que se encuentra en las cookies
-    const id = req.user.id_users;
+    const  id  = req.user.id_users; // Extrae el parámetro id
 
     if (!id) return res.status(400).send('Id is necessary'); // Responde con un error 400 si falta el id
 
@@ -80,17 +79,8 @@ export const login = (async (req, res) => {
         const jwt = await jwtConstructor
             .setProtectedHeader({ alg: 'HS256', typ: 'JWT' }) // Establece el encabezado del JWT
             .setIssuedAt() // Establece la fecha de emisión del JWT
-            .setExpirationTime('1h') // Establece la fecha de expiración del JWT
+            .setExpirationTime('7h') // Establece la fecha de expiración del JWT
             .sign(encoder.encode(secret)); // Firma el JWT con la clave secreta
-
-            //responder token en una cookie
-            res.cookie('token', jwt, { 
-            httpOnly: true, 
-            secure: process.env.NODE_ENV === 'production', // Usar solo en producción
-            sameSite:'strict',
-            maxAge: 3600000
-            }); // Responde con el token JWT en una cookie
-        
         
         return res.send({ jwt }); // Responde con el JWT generado
     } catch (err) {
