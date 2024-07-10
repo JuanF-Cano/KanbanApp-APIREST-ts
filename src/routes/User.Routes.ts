@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getUsers, createUser, login, deleteUser, actualizateUser, getUserById } from "../controllers/User.Controller.js";
-import { validateUser, validateLogin } from "../middleware/models.js";
-import { authenticateToken } from "../middleware/jwt.js";
+import { getUsers, createUser, login, deleteUser, actualizateUser, getUserById } from "../controllers/User.Controller";
+import { validateUser, validateLogin } from "../middleware/models";
+import { authenticateToken } from "../middleware/jwt";
 
 const userRouter = Router();
 

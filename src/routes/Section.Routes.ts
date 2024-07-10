@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getSections, getSectionsTasks, createSection, deleteSection, updateSection } from "../controllers/Section.Controller.js";
-import { authenticateToken } from "../middleware/jwt.js";
+import { getSections, getSectionsTasks, createSection, deleteSection, updateSection } from "../controllers/Section.Controller";
+import { authenticateToken } from "../middleware/jwt";
 
 const sectionRouter = Router();
 

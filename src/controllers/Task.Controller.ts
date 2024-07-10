@@ -1,25 +1,26 @@
-import { pool } from "../db.js"; // Importa la conexión a la base de datos
+import { Request, Response } from 'express';
+import  pool  from "../db"; // Importa la conexión a la base de datos
 import { marked } from 'marked'; // Importa la biblioteca para convertir Markdown a HTML
 
-export const getTask = async (req, res) => {
+export const getTask = async (req: Request, res: Response): Promise<void> => {
     try {
         const result = await pool.query('SELECT * FROM tasks'); // Consulta todas las tareas
         res.status(200).json(result.rows); // Envía las tareas como respuesta JSON
     } catch (err) {
         console.error(err); // Registra el error en la consola
-        res.status(500).send('Error retrieving users'); // Envía un mensaje de error
+        res.status(500).send('Error retrieving tasks'); // Envía un mensaje de error
     }
 }
 
-export const createTask = async (req, res) => {
-    const { title, body, id_section } = req.body; // Extrae datos del cuerpo de la solicitud
+export const createTask = async (req: Request, res: Response): Promise<void> => {
+    const { title, body } = req.body; // Extrae datos del cuerpo de la solicitud
     
     const htmlBody = marked(body); // Convierte el cuerpo Markdown a HTML
   
     try {
         const result = await pool.query(
-            'INSERT INTO tasks (title, body, id_section) VALUES ($1, $2, $3) RETURNING *',
-            [title, htmlBody, id_section]
+            'INSERT INTO tasks (title, body) VALUES ($1, $2) RETURNING *',
+            [title, htmlBody]
         ); // Inserta la nueva tarea en la base de datos
         res.status(201).json(result.rows[0]); // Envía la tarea creada como respuesta JSON
     } catch (err) {
@@ -28,7 +29,7 @@ export const createTask = async (req, res) => {
     }
 }
 
-export const updateTask = async (req, res) => {
+export const updateTask = async (req: Request, res: Response): Promise<void> => {
     const { task_id } = req.params; // Obtiene el ID de la tarea de los parámetros de la URL
     const { title, body, id_section } = req.body; // Extrae datos del cuerpo de la solicitud
     
@@ -46,7 +47,7 @@ export const updateTask = async (req, res) => {
     }
 }
 
-export const updateTaskSection = async (req, res) => {
+export const updateTaskSection = async (req: Request, res:Response ) => {
     
     const { id_section, task_id } = req.body; // Extrae datos del cuerpo de la solicitud
     try {
@@ -61,7 +62,7 @@ export const updateTaskSection = async (req, res) => {
         }
 }
 
-export const deleteTask = async (req, res) => {
+export const deleteTask = async (req: Request, res: Response): Promise<void> => {
     const { task_id } = req.params; // Obtiene el ID de la tarea de los parámetros de la URL
     
     try {

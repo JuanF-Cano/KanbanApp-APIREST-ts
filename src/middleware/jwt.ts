@@ -1,15 +1,27 @@
 import { jwtVerify } from "jose";
 import dotenv from 'dotenv';
+import { Request, Response, NextFunction } from 'express';
+
+// Interfaz para el cuerpo de la solicitud
+interface UserRequestBody extends Request {
+  body: {
+    name: string;
+    email: string;
+    password: string;
+  },
+  user?: Object;
+}
 
 dotenv.config();
 
   // Middleware de autenticación
-const authenticateToken = async (req, res, next) => { 
+const authenticateToken = async (req: UserRequestBody, res: Response, next: NextFunction): Promise<void> => {
     //obten el token desde la cookie
     const token = req.cookies.token;
     // Verifica si el token existe
     if (!token) {
-        return res.status(401).json({ message: "No autorizado" });
+        res.status(401).json({ message: "No autorizado" });
+        return;
         }
 
     try {
@@ -19,7 +31,8 @@ const authenticateToken = async (req, res, next) => {
         next(); // Llama al siguiente middleware
     } catch (err) {
         console.error(err); // Imprime el error en la consola
-        return res.status(401).send('Token inválido o expirado'); // Responde con un error 401 si el token es inválido o ha expirado
+        res.status(401).send('Token inválido o expirado'); // Responde con un error 401 si el token es inválido o ha expirado
+        return;
     }
 };
   
