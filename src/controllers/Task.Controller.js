@@ -46,6 +46,21 @@ export const updateTask = async (req, res) => {
     }
 }
 
+export const updateTaskSection = async (req, res) => {
+    
+    const { id_section, task_id } = req.body; // Extrae datos del cuerpo de la solicitud
+    try {
+        const result = await pool.query(
+            'UPDATE tasks SET id_section=$1 WHERE id_task=$2 RETURNING *',
+            [id_section, task_id]
+        ); // Actualiza la tarea en la base de datos
+            res.status(200).json("tarea actualizada"); // Envía la tarea actualizada como respuesta JSON
+        } catch (err) {
+            console.error(err); // Registra el error en la consola
+            res.status(500).send('Error updating task'); // Envía un mensaje de error
+        }
+}
+
 export const deleteTask = async (req, res) => {
     const { task_id } = req.params; // Obtiene el ID de la tarea de los parámetros de la URL
     
